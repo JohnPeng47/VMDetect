@@ -13,7 +13,7 @@ main:
 	mov eax, 1
 	cpuid
 	bt ecx, 0x1f		;bt copies the bit at [operand] to the carry bit in EFLAGS
-	and cx, 0x80		
+	and cx, 0x1		
 	jc vm				;branches if the carry bit is set
 
 not_vm:

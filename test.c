@@ -1,11 +1,12 @@
 #include <stdio.h>
 
 void main(){
-	func1();
+	const char* hello = "hello world";
+	func1(hello);
 }
 
-void func1(){
-	printf("func1 called\n");
+void func1(char* printme){
+	printf("%s\n", printme);
 }
 
 void func2(){
