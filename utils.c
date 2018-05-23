@@ -12,6 +12,27 @@
 #endif
 
 
+uint32_t resolve_va(char* file, uint32_t va){
+	Elf32_Ehdr* ehdr;
+	Elf32_Phdr* phdr;
+	uint32_t file_offset;
+
+	ehdr = (Elf32_Ehdr* )file;
+	phdr = get_phdrs_ptr(ehdr, file);
+	for(int i=0; i < ehdr->e_phnum; i++, phdr++){
+		if(phdr->p_type == PT_LOAD){
+			if(va >= phdr->p_vaddr && va < phdr->p_vaddr + phdr->p_memsz){
+				printf("found sym @ segment with va: %x, off: %x\n", phdr->p_vaddr, phdr->p_offset);
+				file_offset = va - phdr->p_vaddr;
+				printf("file offset: %d or %x\n", file_offset, file_offset); 			
+			}
+		}
+			
+	}
+	return 0;
+}
+
+
 uint32_t get_sym_value(char* file, char* sym_name){ 
 	Elf32_Ehdr* ehdr;
 	Elf32_Shdr* shdr; //generic entry for enumerating sections
@@ -61,6 +82,9 @@ uint32_t get_sym_value(char* file, char* sym_name){
 	}
 
 }
+Elf32_Phdr* get_phdrs_ptr(Elf32_Ehdr* ehdr, char* file){
+	return (Elf32_Phdr* )(file + ehdr->e_phoff);
+}
 
 Elf32_Shdr* get_section_ptr(Elf32_Ehdr* ehdr, char* file){
 	return (Elf32_Shdr* )(file + ehdr->e_shoff);
@@ -80,12 +104,8 @@ uint32_t get_sym_addr(char* file, Elf32_Sym* sym, Elf32_Ehdr* ehdr, Elf32_Shdr* 
 	}
 	else{
 		printf("rel\n");
-		Elf32_Shdr* shdr = get_section_ptr(ehdr, file);
-		Elf32_Shdr* sym_section = get_section(shdr, sym->st_shndx);
-		printf("section offset: %x\n", sym_section->sh_offset);
-		printf("file start: %x\n", file);
 		printf("sym value: %x\n", sym->st_value);
-		return file + sym_section->sh_offset + sym->st_value;
+		return sym->st_value;
 	}
 }
 	

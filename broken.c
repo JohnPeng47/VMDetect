@@ -59,7 +59,7 @@ uint32_t main(int argc, char** argv){
 
 	printf("Symbol names: \n");
 	for(int i = 0;  i < (symtab.sh_size / symtab.sh_entsize); i++, sym++){
-	    printf("%x\n",&symtab_str[sym->st_name]);
+	    printf("%s\n",&symtab_str[sym->st_name]);
 	    if(strcmp(&symtab_str[sym->st_name], sym_name) ==0) 
 			printf("not crahsed\n");
 

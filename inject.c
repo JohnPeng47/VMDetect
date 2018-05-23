@@ -24,9 +24,14 @@ void main(int argc, char** argv){
 	char mem[st.st_size];
 
 	read(fd, mem, st.st_size);
-	uint32_t sym_addr = get_sym_value(mem, sym_name);	
+	//parse symbol table to determine the virtual address of function
+	uint32_t sym_addr_va= get_sym_value(mem, sym_name);	
 	printf("starting address: %x\n", mem);
-	printf("sym addr @ %p\n", sym_addr);
+	printf("sym virtual addr @ %p\n", sym_addr_va);
+	
+	//at this point, we need to search program headers for 
+	uint32_t sym_addr_file = resolve_va(mem, sym_addr_va);
+	
 	
 }
 	
