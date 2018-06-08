@@ -24,6 +24,7 @@ uint32_t resolve_va(char* file, uint32_t va){
 			if(va >= phdr->p_vaddr && va < phdr->p_vaddr + phdr->p_memsz){
 				printf("found sym @ segment with va: %x, off: %x\n", phdr->p_vaddr, phdr->p_offset);
 				file_offset = va - phdr->p_vaddr;
+				return file_offset;
 				printf("file offset: %d or %x\n", file_offset, file_offset); 			
 			}
 		}
@@ -54,7 +55,7 @@ uint32_t get_sym_value(char* file, char* sym_name){
 	for(int i = 0; i < ehdr->e_shnum; i++){
 		if(shdr[i].sh_size){
 
-			printf("%s\n", &sh_strtab[shdr[i].sh_name]);
+			//printf("%s\n", &sh_strtab[shdr[i].sh_name]);
 	
 			if(strcmp(&sh_strtab[shdr[i].sh_name], ".strtab") == 0)
 				strtab = shdr[i];
@@ -71,9 +72,9 @@ uint32_t get_sym_value(char* file, char* sym_name){
 	sym = (Elf32_Sym* )(mem + symtab.sh_offset);
 	
 	
-	printf("Symbol names: \n");
+	//printf("Symbol names: \n");
 	for(int i = 0;  i < (symtab.sh_size / symtab.sh_entsize); i++, sym++){
-		printf("name: %s, st_name: %d\n",&symtab_str[sym->st_name], sym->st_name);
+		//printf("name: %s, st_name: %d\n",&symtab_str[sym->st_name], sym->st_name);
 		if(strcmp(&symtab_str[sym->st_name], sym_name) ==0)	
 					
 			//printf("name: %s, st_name: %d\n",&symtab_str[sym->st_name], sym->st_name);
