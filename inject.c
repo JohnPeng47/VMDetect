@@ -48,12 +48,14 @@ void main(int argc, char** argv){
 	uint32_t jmp_addr_va = get_sym_value(mem, jmp_name);
 	PRINTDEBUG(("target jump addr @ %x\n", jmp_addr_va));
 
+	//function to modify the 
+
 	ehdr = (Elf32_Ehdr* )mem;
 	phdr = (Elf32_Phdr* )(mem + ehdr->e_phoff); //need brackets around whole expression for typecasting
 	shdr = (Elf32_Shdr* )(mem + ehdr->e_shoff);
 
-	int jmp_code_sz = 7;
-	char jmp_code[7];
+	int jmp_code_sz = 6;
+	char jmp_code[6];
 
 	jmp_code[0] = '\x68';
 	jmp_code[1] = '\x00';
@@ -61,7 +63,7 @@ void main(int argc, char** argv){
 	jmp_code[3] = '\x00';
 	jmp_code[4] = '\x00';
 	jmp_code[5] = '\xc3';
-	jmp_code[6] = 0;
+	// jmp_code[6] = 0;  this caused opcodes to be misaligned, and resulted in faulty disassembly
 
 	
 	*(uint32_t *)&jmp_code[1] = jmp_addr_va; //patch with the destination address

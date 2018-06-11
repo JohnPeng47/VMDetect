@@ -77,7 +77,6 @@ uint32_t get_sym_value(char* file, char* sym_name){
 		//printf("name: %s, st_name: %d\n",&symtab_str[sym->st_name], sym->st_name);
 		if(strcmp(&symtab_str[sym->st_name], sym_name) ==0)	
 					
-			//printf("name: %s, st_name: %d\n",&symtab_str[sym->st_name], sym->st_name);
 			//TODO: resolve reloc'd syms
 			return get_sym_addr(mem, sym, ehdr, &strtab);
 	}
